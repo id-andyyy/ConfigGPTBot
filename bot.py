@@ -3,7 +3,7 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from config_data.config import load_config
-from handlers import user_handlers
+from handlers import user_handlers, admin_handlers
 
 logger = logging.getLogger(__name__)
 
@@ -18,9 +18,10 @@ async def main():
 
     config = load_config(r'.env')
 
-    bot: Bot = Bot(token=config.tg_bot.token, parse_mode='MarkdownV2')
+    bot: Bot = Bot(token=config.tg_bot.token, parse_mode='html')
     dp: Dispatcher = Dispatcher()
 
+    dp.include_router(admin_handlers.router)
     dp.include_router(user_handlers.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
