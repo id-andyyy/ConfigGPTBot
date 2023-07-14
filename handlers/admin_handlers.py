@@ -6,6 +6,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 
 from lexicon.lexicon_ru import *
 from states.admin_states import FSMAddUser
+from models.methods import add_user, get_info
 
 router: Router = Router()
 
@@ -19,7 +20,13 @@ async def process_adduser_command(message: Message, state: FSMContext):
 @router.message(StateFilter(FSMAddUser.forward_message))
 async def process_message_forwarded(message: Message, state: FSMContext):
     if message.forward_from is not None:
+        await add_user(message.forward_from.id)
         await message.answer(text=LEXICON_ADMIN['user_added'].format(name=message.forward_from.first_name))
     else:
         await message.answer(text=LEXICON_ADMIN['incorrect_message'])
     await state.clear()
+
+
+@router.message(Command(commands='print'))
+async def process_adduser_command(message: Message):
+    await get_info()

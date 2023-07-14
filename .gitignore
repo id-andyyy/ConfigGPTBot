@@ -1,6 +1,5 @@
 .env
 data.db
-migrations/
-alembic.ini
+migrations/versions/
 
 venv/
